@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- Hand written by Gemini6Ice 2015, inspired by FluffyDamager's version 2009-2012 -->
+<html>
+<head>
+<title>MP Restocking Shops</title>
+<meta name="Author" content="Gemini6Ice">
+<meta name="Keywords" content="marapets shop restock times time restocking refresh refreshing restocks refreshes">
+<meta name="Description" content="Marapets Shop Restock Times">
+<script Type="text/javascript" Language="JavaScript">
+	var shopsOff="#e0dddd";
+	var shopsSoon="#66ddff";
+	var shopsNow="#66ff22";
+	var background="#ffffff";
+	var upcomingInterval=20;
+	var freshInterval=20;
+	
+	function beginClock(){
+		document.getElementsByTagName("body")[0].style.backgroundColor=background;
+		setInterval("clockTick()",1000);
+	}
+	
+	function clockTick(){
+		updateTimeDisplay();
+		updateTableDisplays();
+	}
+	
+	function updateTimeDisplay(){
+		var d = new Date();
+	
+		var timestring;
+		timestring = addZero(d.getHours(),2);
+		timestring += ":" + addZero(d.getMinutes(),2);
+		timestring += ":" + addZero(d.getSeconds(),2);
+		//timestring += "." + addZero(Math.round(d.getMilliseconds()/10,0),2);
+	
+		document.getElementById("time").innerHTML=timestring;
+  	}
+  	
+  	function addZero(x,n) {
+    	if (x.toString().length < n) {
+        	x = "0" + x;
+    	}
+    	return x;
+	}
+
+  	
+	function updateTableDisplays(){
+		var shopsTables= document.getElementsByClassName("shops");
+		for(var shopsTableNum=0;shopsTableNum<shopsTables.length;shopsTableNum++){
+			shopsTables[shopsTableNum].style.backgroundColor=shopsOff;
+			shopsTables[shopsTableNum].style.border="2px solid "+background;
+		}
+		for(var tableNum=0;tableNum<5;tableNum++){
+			var d = new Date();
+			
+			if((d.getMinutes()+1) % 5 == tableNum && d.getSeconds()>=60-upcomingInterval){
+				document.getElementById("table"+tableNum).style.backgroundColor=
+					getGradient(shopsOff,shopsSoon,(d.getSeconds()+upcomingInterval-60)/upcomingInterval);
+				document.getElementById("table"+tableNum).style.border="2px solid "+shopsSoon;
+
+			}else if(d.getMinutes() % 5 == tableNum && d.getSeconds()<=freshInterval){
+				document.getElementById("table"+tableNum).style.backgroundColor=
+					getGradient(shopsNow,shopsOff,d.getSeconds()/freshInterval);
+				document.getElementById("table"+tableNum).style.border="2px solid "+shopsNow;
+
+			}
+			
+			/* SMUGGLER CODE */
+			if(d.getMinutes() == 13){
+				document.getElementById("tableSmuggler").style.backgroundColor=
+					getGradient(shopsOff,shopsSoon,d.getSeconds()/59);
+				document.getElementById("tableSmuggler").style.border="2px solid "+shopsSoon;
+
+			}else if(d.getMinutes() == 14 && d.getSeconds()<=freshInterval){
+				document.getElementById("tableSmuggler").style.backgroundColor=
+					getGradient(shopsNow,shopsOff,d.getSeconds()/freshInterval);
+				document.getElementById("tableSmuggler").style.border="1px solid "+shopsNow;
+
+			}			
+		}
+	}
+	
+	function getGradient(color1,color2,percent){
+		var rgb1=new Array(3),rgb2=new Array(3),newrgb=new Array(3);
+		for(color=0;color<=3;color++){
+			rgb1[color]=parseInt(color1.substring(2*color+1,2*color + 3),16);
+			rgb2[color]=parseInt(color2.substring(2*color+1,2*color + 3),16);
+			
+			newrgb[color]=addZero(Math.floor((1-percent)*rgb1[color] + (percent)*rgb2[color]).toString(16),2);
+		}
+		return "#"+newrgb[0]+newrgb[1]+newrgb[2];
+		
+	}
+
+</script>
+
+<style type="text/css">
+
+body{
+	margin: 0;
+	padding: 0;
+	font-family:'Calibri';
+	font-size:16;
+	overflow:hidden;
+}
+#header{
+	margin: 0px;
+	padding: 0px;
+	height: 20px;
+	width: 100%;
+	font-weight: bold;
+	text-decoration: underline;
+	text-align: center;
+}
+#shopsbar{
+	position: absolute;
+	left: 2px;
+	top: 25px;
+	width: calc(30% - 4px);
+	text-align:center;
+}
+#iframe
+{
+	position: absolute;
+	left: 30%;
+	top: 25px;
+	width: 70%;
+	height: calc(100% - 25px);
+}
+#time{
+	position: absolute;
+	left: 2px;
+	top: 2px;
+	width: calc(30% - 4px);
+	
+	padding: 0px;
+	border-style:none;
+	text-align:center;
+	font-weight: bold;
+}
+
+.shops{
+	color:black;
+	width: calc(100% - 10px);
+	margin: 2px;
+	padding-bottom: 1px;
+	text-align:center;
+}
+.shops a {
+	display: inline-block;
+	text-decoration:none;
+	color:#000000;
+}
+.shops .shopstime{
+	text-align: center;
+}
+.shops .singleshop {
+	width: 80px;
+	height: 38px;
+	border: 1px solid #eeeeee;
+	padding: 1px;
+	margin: 1px;
+	display:table-cell;
+	vertical-align: middle; 
+	text-align: center; 
+}
+.shops .bp {
+	color: #770000;
+	border: 1px dashed #ff7777;
+}
+.shops .rp {
+	color: #007700;
+	border: 1px dashed #77ff77;
+}
+.shops .dukka {
+	color: #884411;
+	border: 1px dashed #ffaa88;
+}
+.shops .special {
+	color: #ffaa00;
+	border: 1px dashed #ffcc99;
+}
+.shops a:hover .singleshop{
+	text-decoration:none;
+	font-weight:bold;
+	color:#880000;
+	border: 1px solid #880000;
+}
+ul{
+ list-style-type: none;
+}
+</style>
+</head>
+
+<body onload="beginClock()">
+
+<div id="header">Marapets Shop Restock Times</div>
+
+<div id="time">TIME</div>
+
+<div id="shopsbar">
+
+	<div class="shops" id="table0">
+		<div class="shopstime">:x0 :x5</div>
+<!-- fixed stock <a target="iframe" href="http://www.marapets.com/shop.php?id=81"><div class="singleshop">Antiques</div></a> -->
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=61"><div class="singleshop">Batteries</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=41"><div class="singleshop">Computers</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=1"><div class="singleshop">Fake Costumes</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=06"><div class="singleshop">Vegetables</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=26"><div class="singleshop">Frozen Foods</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=66"><div class="singleshop">Candles</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=36"><div class="singleshop">Cleaning Products</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=46"><div class="singleshop">Clothing</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=51"><div class="singleshop">Contact Lenses</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=21"><div class="singleshop">DVDs</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=16"><div class="singleshop">Flowers</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=56"><div class="singleshop bp">Glasses</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=11"><div class="singleshop">Musical Instruments</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=76"><div class="singleshop bp">Mummy Dolls</div></a>
+<!-- fixed stock <a target="iframe" href="http://www.marapets.com/shop.php?id=86"><div class="singleshop dukka">Pirate Ship</div></a> -->
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=31"><div class="singleshop">Tools</div></a>
+	</div>
+
+	<div class="shops" id="table1">
+		<div class="shopstime">:x1 :x6</div>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=67"><div class="singleshop">Perfume</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=17"><div class="singleshop">Chocolate</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=27"><div class="singleshop">Balloons</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=32"><div class="singleshop">Costumes</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=12"><div class="singleshop">School Supplies</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=02"><div class="singleshop">Eggs</div></a>
+		<a target="iframe" href="http://www.marapets.com/factory.php"><div class="singleshop bp">Factory Outlet*</div></a>
+<!-- fixed stock <a target="iframe" href="http://www.marapets.com/shop.php?id=82"><div class="singleshop">Millionaire's Lodge</div></a>-->
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=22"><div class="singleshop">Mini Pets</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=57"><div class="singleshop">Minipet Food</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=47"><div class="singleshop">Pearls</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=62"><div class="singleshop">Seeds</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=37"><div class="singleshop">Sushi</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=72"><div class="singleshop">Toiletries</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=52"><div class="singleshop special">Video Games</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=7"><div class="singleshop">Weapons</div></a>
+	</div>
+
+	<div class="shops" id="table2">
+		<div class="shopstime">:x2 :x7</div>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=58"><div class="singleshop">Wigs</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=28"><div class="singleshop">Soft Drinks</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=63"><div class="singleshop">Coffee</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=13"><div class="singleshop">Pizza</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=03"><div class="singleshop">Giant Vegetables</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=18"><div class="singleshop">Candy</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=98"><div class="singleshop">Charity Shop*</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=38"><div class="singleshop">Armour</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=33"><div class="singleshop">Bakery</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=93"><div class="singleshop special">Boosters</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=68"><div class="singleshop">Eye Make Up</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=53"><div class="singleshop">Footwear</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=23"><div class="singleshop">Halloween Treats</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=43"><div class="singleshop">Illegal Concoctions</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=73"><div class="singleshop">Jewellery</div></a>
+<!-- fixed stock <a target="iframe" href="http://www.marapets.com/shop.php?id=83"><div class="singleshop rp">Kwazikujo</div></a> -->
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=08"><div class="singleshop">Meat</div></a>
+<!-- fixed stock <a target="iframe" href="http://www.marapets.com/shop.php?id=88"><div class="singleshop special">Olympics Shop</div></a> -->
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=80"><div class="singleshop">Spicesº</div></a>
+	</div>
+
+	<div class="shops" id="table3">
+		<div class="shopstime">:x3 :x8</div>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=59"><div class="singleshop">Canned Food</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=64"><div class="singleshop">Gourmet Mutant</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=77"><div class="singleshop">Diner</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=39"><div class="singleshop">Car Parts</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=19"><div class="singleshop">Fruits</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=29"><div class="singleshop">Fast Food</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=49"><div class="singleshop">Hair Dye</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=14"><div class="singleshop">Ice Cream</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=04"><div class="singleshop">Giant Flowers</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=09"><div class="singleshop">Books</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=94"><div class="singleshop special">Desert Spy</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=70"><div class="singleshop">Face Make Upº</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=79"><div class="singleshop rp">Poison</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=34"><div class="singleshop">Potions</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=102"><div class="singleshop">Smoothiesº</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=74"><div class="singleshop dukka">Spells</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=44"><div class="singleshop">Stars</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=69"><div class="singleshop">Tattoos</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=54"><div class="singleshop">Voodoo Dolls</div></a>
+	</div>
+
+	<div class="shops" id="table4">
+		<div class="shopstime">:x4 :x9</div>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=35"><div class="singleshop">Cheese</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=71"><div class="singleshop">Cereal</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=15"><div class="singleshop">Stamps</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=20"><div class="singleshop">Giant Fruits</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=65"><div class="singleshop">Traps</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=60"><div class="singleshop">Charms</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=05"><div class="singleshop">Toys</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=25"><div class="singleshop">CDs</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=55"><div class="singleshop rp">Cooking Ingredients</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=50"><div class="singleshop">Lipsticks</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=40"><div class="singleshop bp">Health Tonics</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=10"><div class="singleshop">Medicine</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=101"><div class="singleshop">Mining Tools</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=45"><div class="singleshop bp">Potato Chips</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=75"><div class="singleshop dukka">Restaurant</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=95"><div class="singleshop special">Slater Stalker</div></a>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=30"><div class="singleshop">Trading Cards</div></a>
+	</div>
+
+	<div class="shops" id="tableSmuggler">
+		<div class="shopstime">:14</div>
+		<a target="iframe" href="http://www.marapets.com/shop.php?id=97"><div class="singleshop">Smuggler</div></a>
+	</div>
+	<div class="shops" id="tableSmuggler">
+		<a target="iframe" href="https://www.marapets.com/plushies.php"><div class="singleshop">Plushies</div></a>
+		<a target="iframe" href="https://www.marapets.com/plushies2.php"><div class="singleshop">Enchanted Plushies</div></a>
+		<a target="iframe" href="https://www.marapets.com/gumball.php"><div class="singleshop">Gumball</div></a>
+		<a target="iframe" href="https://www.marapets.com/potofgold.php"><div class="singleshop">Pot of Gold</div></a>
+		
+	</div>
+	<ul>
+	<li>*: These shops have an any-purchase timer, not just per item.</li>
+	<li>º: These shops do not restock when their shop id indicates they should.</li>
+	</ul>
+	<p>If you appreciate what I do, feel free to maramail me a thank-you or send me a photo. My username is <em>gemini6ice</em></p>
+</div>
+
+
+<iframe name="iframe" id="iframe" bgcolor="#FFFFFF" src="http://www.marapets.com/market.php">
+
+</body>
+</html>
